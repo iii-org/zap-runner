@@ -19,7 +19,7 @@ def run():
     test_id = res.json()['data']['test_id']
     print(f'test_id={test_id}, start testing.')
     report = subprocess.run(f'python zap-full-scan.py -t {os.getenv("TARGET_URL")}',
-                            stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+                            stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8').strip()
     lines = report.splitlines()
     index = -1
     last_line = ''
