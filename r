@@ -1,2 +1,2 @@
-export $(cat .env | xargs)
-sudo docker run -e TARGET_URL=$TARGET_URL iiiorg/zap-runner:0.0.1
+sudo docker run --env-file ./.env iiiorg/zap-runner:0.0.1
+

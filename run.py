@@ -15,6 +15,7 @@ def run():
         'branch': os.getenv('GIT_BRANCH'),
         'commit_id': os.getenv('GIT_COMMIT_ID')
     }, token)
+    print(res.text)
     test_id = res.json()['data']['test_id']
     print(f'test_id={test_id}, start testing.')
     report = subprocess.run(f'python zap-full-scan.py -t {os.getenv("TARGET_URL")}',
@@ -34,11 +35,12 @@ def run():
         'pass': int(stats[6])
     }
     print('Uploading to nexus...')
-    api_put('/zap', {
+    res = api_put('/zap', {
         'test_id': test_id,
         'result': json.dumps(result),
         'full_log': report
     }, token)
+    print(res.text)
     print('Job done.')
 
 
