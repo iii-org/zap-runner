@@ -13,8 +13,7 @@ def run():
     res = api_post('/zap', {
         'project_name': os.getenv('PROJECT_NAME'),
         'branch': os.getenv('GIT_BRANCH'),
-        'commit_id': os.getenv('GIT_COMMIT_ID'),
-        'sequence': os.getenv('SEQUENCE')
+        'commit_id': os.getenv('GIT_COMMIT_ID')
     }, token)
     test_id = res.json()['data']['test_id']
     print(f'test_id={test_id}, start testing.')
