@@ -67,7 +67,7 @@ def _request(method, path, headers=None, params=None, data=None, token=None):
     if token is not None:
         headers['Authorization'] = f'Bearer {token}'
 
-    url = os.getenv('api_origin') + path
+    url = f'{os.getenv("api_origin")}{path}'
     print(f'{method} {url}, data={json.dumps(data)}')
 
     if method.upper() == 'GET':
