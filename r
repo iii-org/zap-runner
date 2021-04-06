@@ -1,2 +1,2 @@
-sudo docker run --env-file ./.env iiiorg/zap-runner:0.0.1
+sudo docker run -v $(pwd):/zap/wrk/:rw --env-file ./.env iiiorg/zap-runner:0.0.5
 

@@ -18,22 +18,24 @@ def run():
     print(res.text)
     test_id = res.json()['data']['test_id']
     print(f'test_id={test_id}, start testing.')
-    report = subprocess.run(f'python zap-full-scan.py -t {os.getenv("TARGET_URL")}',
+    subprocess.run(f'python zap-full-scan.py -d -P 9487 -t {os.getenv("TARGET_URL")} -r report.html -J report.json',
                             stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8').strip()
-    lines = report.splitlines()
-    index = -1
-    last_line = ''
-    while last_line == '':
-        last_line = lines[index]
-        index -= 1
-    stats = re.findall(': (\\d+)', last_line)
     result = {
-        'fail': int(stats[0]) + int(stats[1]),
-        'warning': int(stats[2]) + int(stats[3]),
-        'info': int(stats[4]),
-        'ignore': int(stats[5]),
-        'pass': int(stats[6])
+        '0': 0,
+        '1': 0,
+        '2': 0,
+        '3': 0
     }
+    with open('/zap/wrk/report.json', 'r') as f:
+        data = json.load(f)
+        alerts = data['site'][0]['alerts']
+        for alert in alerts:
+            result[alert['riskcode']] += 1
+
+    report = None
+    with open('/zap/wrk/report.html', 'r') as file:
+        report = file.read()
+
     print('Uploading to nexus...')
     res = api_put('/zap', {
         'test_id': test_id,
