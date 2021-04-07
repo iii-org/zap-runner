@@ -15,10 +15,9 @@ def run():
         'branch': os.getenv('GIT_BRANCH'),
         'commit_id': os.getenv('GIT_COMMIT_ID')
     }, token)
-    print(res.text)
     test_id = res.json()['data']['test_id']
     print(f'test_id={test_id}, start testing.')
-    subprocess.run(f'python zap-full-scan.py -d -P 9487 -t {os.getenv("TARGET_URL")} -r report.html -J report.json',
+    subprocess.run(f'python zap-full-scan.py -P 9487 -t {os.getenv("TARGET_URL")} -r report.html -J report.json',
                             stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8').strip()
     result = {
         '0': 0,
@@ -42,7 +41,6 @@ def run():
         'result': json.dumps(result),
         'full_log': report
     }, token)
-    print(res.text)
     print('Job done.')
 
 
@@ -72,7 +70,6 @@ def _request(method, path, headers=None, params=None, data=None, token=None):
         headers['Authorization'] = f'Bearer {token}'
 
     url = f'{os.getenv("api_origin")}{path}'
-    print(f'{method} {url}, data={json.dumps(data)}')
 
     if method.upper() == 'GET':
         return requests.get(url, headers=headers, params=params, verify=False)
