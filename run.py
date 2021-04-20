@@ -27,9 +27,10 @@ def run():
     }
     with open('/zap/wrk/report.json', 'r') as f:
         data = json.load(f)
-        alerts = data['site'][0]['alerts']
-        for alert in alerts:
-            result[alert['riskcode']] += 1
+        for site in data['site']:
+            alerts = site['alerts']
+            for alert in alerts:
+                result[alert['riskcode']] += 1
 
     report = None
     with open('/zap/wrk/report.html', 'r') as file:
