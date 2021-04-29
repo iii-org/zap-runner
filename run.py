@@ -17,7 +17,7 @@ def run():
     }, token)
     test_id = res.json()['data']['test_id']
     print(f'test_id={test_id}, start testing.')
-    subprocess.run(f'python zap-full-scan.py -P 9487 -t {os.getenv("TARGET_URL")} -r report.html -J report.json',
+    subprocess.run(f'python zap-baseline.py -P 9487 -t {os.getenv("TARGET_URL")} -r report.html -J report.json',
                             stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8').strip()
     result = {
         '0': 0,
