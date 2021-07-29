@@ -9,6 +9,13 @@ import requests
 def run():
     print('Logging into nexus...')
     token = login()
+    res = api_get('/plugins', token=token)
+    plugins = res.json()['data']
+    for plugin in plugins:
+        if plugin['name'] == 'zap':
+            if plugin['disabled']:
+                print('Zap plugin is disabled.')
+                return
     print('Mention nexus test starting...')
     res = api_post('/zap', {
         'project_name': os.getenv('PROJECT_NAME'),
@@ -55,6 +62,10 @@ def login():
     return res['data']['token']
 
 
+def api_get(path, headers=None, params=None, token=None):
+    return _request('GET', path, headers, params, token=token)
+
+
 def api_post(path, data, token=None):
     return _request('POST', path, data=data, token=token)
 
@@ -74,6 +85,7 @@ def _request(method, path, headers=None, params=None, data=None, token=None):
 
     if method.upper() == 'GET':
         return requests.get(url, headers=headers, params=params, verify=False)
+
     elif method.upper() == 'POST':
         return requests.post(url, data=body, params=params,
                              headers=headers, verify=False)
